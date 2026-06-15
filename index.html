@@ -272,6 +272,10 @@ body { font-family: var(--sans); background: var(--paper); color: var(--ink); mi
   -webkit-tap-highlight-color: transparent;
 }
 .btn-download-all:hover { background: #3d3258; }
+.btn-download-all.btn-secondary { background: transparent; color: var(--ink2); border: 1px solid var(--paper3); }
+.btn-download-all.btn-secondary:hover { background: var(--paper2); }
+.btn-download-all.btn-clear-all { background: transparent; color: #b04a3f; border: 1px solid rgba(176,74,63,0.35); margin-left: auto; }
+.btn-download-all.btn-clear-all:hover { background: rgba(176,74,63,0.08); }
 .download-all-hint { font-size: 12px; color: var(--ink3); font-style: italic; }
 
 /* ── NOTIFICATION ── */
@@ -383,7 +387,9 @@ body { font-family: var(--sans); background: var(--paper); color: var(--ink); mi
 
     <div class="download-all-row">
       <button class="btn-download-all" onclick="downloadAllResponses()">&#8659; Download all responses</button>
+      <button class="btn-download-all btn-secondary" onclick="backupAllJSON()">&#8623; Backup (JSON)</button>
       <span class="download-all-hint" id="download-all-hint"></span>
+      <button class="btn-download-all btn-clear-all" onclick="clearAllResponses()">&#10005; Clear all my work</button>
     </div>
 
   </main>
@@ -503,7 +509,36 @@ function buildNav() {
   });
 }
 
-function saveCurrent() { saved[current] = document.getElementById('response-box').value; }
+var STORAGE_KEY = 'sparkStretchThinking.v1';
+
+function writeToStorage() {
+  try {
+    var data = {
+      v: 1,
+      name: document.getElementById('student-name').value,
+      year: document.getElementById('student-year').value,
+      saved: saved
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch (e) { /* silent — storage disabled or quota exceeded */ }
+}
+
+function loadFromStorage() {
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    var data = JSON.parse(raw);
+    if (!data || typeof data !== 'object') return;
+    if (data.saved && typeof data.saved === 'object') saved = data.saved;
+    if (typeof data.name === 'string') document.getElementById('student-name').value = data.name;
+    if (typeof data.year === 'string') document.getElementById('student-year').value = data.year;
+  } catch (e) { /* silent — corrupt or unavailable */ }
+}
+
+function saveCurrent() {
+  saved[current] = document.getElementById('response-box').value;
+  writeToStorage();
+}
 function goTo(i) { current = i; render(); }
 function navigate(dir) { saveCurrent(); current = Math.max(0, Math.min(TASKS.length-1, current+dir)); render(); }
 
@@ -525,8 +560,11 @@ function updateWordCounter() {
 }
 
 document.getElementById('response-box').addEventListener('input', function() {
+  saveCurrent();
   if (current === 17) updateWordCounter();
 });
+document.getElementById('student-name').addEventListener('input', writeToStorage);
+document.getElementById('student-year').addEventListener('input', writeToStorage);
 
 function showScreenshot() {
   saveCurrent();
@@ -551,8 +589,53 @@ function clearResponse() {
   if (confirm('Clear your response for this task?')) {
     document.getElementById('response-box').value = '';
     saved[current] = '';
+    writeToStorage();
     document.getElementById('screenshot-panel').classList.remove('visible');
   }
+}
+
+function backupAllJSON() {
+  saveCurrent();
+  var data = {
+    app: 'SPARK Stretch Thinking',
+    exported: new Date().toISOString(),
+    student: {
+      name: document.getElementById('student-name').value || '',
+      year: document.getElementById('student-year').value || ''
+    },
+    responses: TASKS.map(function(t, i) {
+      return {
+        taskNumber: i + 1,
+        section: t.section,
+        title: t.title,
+        tag: t.tag,
+        response: saved[i] || ''
+      };
+    })
+  };
+  var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'stretch-thinking-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
+  notify('Backup saved ✓');
+}
+
+function clearAllResponses() {
+  if (!confirm('Clear ALL your work? This erases every response on every task on this device. This cannot be undone.')) return;
+  if (!confirm('Are you sure? Consider downloading a backup first.')) return;
+  saved = {};
+  try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+  document.getElementById('student-name').value = '';
+  document.getElementById('student-year').value = '';
+  document.getElementById('response-box').value = '';
+  document.getElementById('screenshot-panel').classList.remove('visible');
+  render();
+  notify('All work cleared ✓');
 }
 
 function notify(msg) {
@@ -906,6 +989,7 @@ function downloadAllResponses() {
   }
 }
 
+loadFromStorage();
 buildNav();
 render();
 </script>
