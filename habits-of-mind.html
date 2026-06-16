@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habits of Mind Mapping &middot; SPARK Stretch Thinking</title>
+<style>
+:root {
+  --paper:  #FAF9F6;
+  --paper2: #f3efe6;
+  --ink:    #2E2748;
+  --ink2:   #4A3F60;
+  --ink3:   #807495;
+  --accent: #6B5B93;
+  --rule:   #e5e0d8;
+  --serif:  ui-serif, Georgia, 'Times New Roman', serif;
+  --sans:   ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--paper); }
+body { font-family: var(--serif); color: var(--ink); margin: 0; padding: 0; line-height: 1.6; }
+.wrap { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 4rem; }
+
+header { border-bottom: 1px solid var(--rule); padding-bottom: 1.6rem; margin-bottom: 2.5rem; }
+.eyebrow { font-family: var(--sans); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--ink3); margin: 0 0 0.6rem; font-weight: 500; }
+h1 { font-family: var(--sans); font-size: 2.2rem; font-weight: 600; color: var(--ink); margin: 0 0 0.6rem; letter-spacing: -0.01em; }
+.subtitle { color: var(--ink2); font-size: 1.05rem; margin: 0 0 1rem; max-width: 60ch; }
+.back { display: inline-block; color: var(--accent); text-decoration: none; font-family: var(--sans); font-size: 0.95rem; }
+.back:hover { text-decoration: underline; }
+
+h2 { font-family: var(--sans); font-size: 1.3rem; font-weight: 600; color: var(--ink2); margin: 3rem 0 1rem; }
+p { margin: 0 0 1rem; }
+.intro p { color: var(--ink2); max-width: 70ch; }
+.intro strong { color: var(--ink); }
+
+.habits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 0.5rem 1.5rem;
+  margin: 1rem 0 2rem;
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  color: var(--ink2);
+}
+.habits-grid .h-num { display: inline-block; width: 1.8em; color: var(--ink3); font-variant-numeric: tabular-nums; }
+
+.pillar { margin-top: 2.5rem; }
+.pillar p { color: var(--ink2); max-width: 70ch; }
+.pillar p strong { color: var(--ink); }
+.standouts-label { font-family: var(--sans); font-size: 0.78rem; letter-spacing: 1.2px; text-transform: uppercase; color: var(--ink3); margin: 1.25rem 0 0.5rem; font-weight: 600; }
+.standouts { list-style: none; padding: 0; margin: 0; font-family: var(--sans); }
+.standouts li { padding: 0.55rem 0 0.55rem 1.2rem; border-bottom: 1px dotted var(--rule); position: relative; color: var(--ink2); font-size: 0.95rem; }
+.standouts li:last-child { border-bottom: 0; }
+.standouts li::before { content: "→"; position: absolute; left: 0; top: 0.55rem; color: var(--accent); }
+.standouts li strong { color: var(--ink); font-weight: 600; }
+.standouts li .num { color: var(--ink3); font-variant-numeric: tabular-nums; font-weight: 500; }
+
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.92rem; font-family: var(--sans); }
+th { text-align: left; padding: 0.8rem 0.7rem; border-bottom: 2px solid var(--ink2); color: var(--ink2); font-weight: 600; font-size: 0.78rem; letter-spacing: 1.2px; text-transform: uppercase; vertical-align: bottom; }
+td { padding: 0.9rem 0.7rem; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.5; }
+td.num { font-variant-numeric: tabular-nums; color: var(--ink3); width: 2.5em; font-weight: 500; }
+td.title { font-weight: 600; color: var(--ink); width: 18%; }
+td.section { color: var(--ink3); font-size: 0.85rem; width: 15%; }
+td.habits { color: var(--accent); font-weight: 500; width: 24%; }
+td.rationale { color: var(--ink2); }
+
+.tag { display: inline-block; font-size: 10px; padding: 1px 8px; border-radius: 10px; background: rgba(107,91,147,0.10); color: var(--accent); margin-left: 4px; letter-spacing: 0.4px; font-weight: 500; }
+.tag-stem { background: rgba(136,176,75,0.12); color: #6f9239; }
+.tag-hum  { background: rgba(146,168,209,0.15); color: #5d7aab; }
+.tag-soc  { background: rgba(255,111,97,0.12); color: #c35044; }
+.tag-cre  { background: rgba(107,91,147,0.12); color: #6B5B93; }
+.tag-phi  { background: rgba(184,125,122,0.18); color: #8a4f4c; }
+
+.footnote { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); color: var(--ink3); font-size: 0.85rem; font-style: italic; max-width: 70ch; }
+.footnote a { color: var(--accent); text-decoration: none; }
+.footnote a:hover { text-decoration: underline; }
+
+@media (max-width: 720px) {
+  .wrap { padding: 2rem 1.1rem 3rem; }
+  h1 { font-size: 1.7rem; }
+  table, thead, tbody, tr, th, td { display: block; }
+  thead { display: none; }
+  tr { border-bottom: 1px solid var(--rule); padding: 1rem 0; }
+  td { padding: 0.2rem 0; border: 0; }
+  td.num { display: inline; color: var(--ink3); margin-right: 0.5rem; }
+  td.num::after { content: "·"; margin-left: 0.4rem; }
+  td.title { display: inline; }
+  td.section { display: block; margin: 0.3rem 0; }
+  td.habits::before { content: "Habits: "; color: var(--ink3); font-weight: 500; }
+  td.rationale::before { content: "Why: "; color: var(--ink3); font-weight: 500; }
+  td.habits, td.rationale { margin-top: 0.3rem; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Stretch Tasks &middot; Framework alignment</p>
+  <h1>Habits of Mind &mdash; Task Mapping</h1>
+  <p class="subtitle">How each of the 30 Stretch Tasks engages the four pillars of James Anderson's Learnership framework &mdash; the Mindset Continuum, Habits of Mind, the Agile Learner, and Effective Effort.</p>
+  <a class="back" href="index.html">&larr; Back to Stretch Tasks</a>
+</header>
+
+<section class="intro">
+  <h2>About this mapping</h2>
+  <p>James Anderson's <strong>Learnership</strong> framework treats learning as a set of skills students actively develop, rather than a fixed capacity they either have or don't. Four interlocking ideas sit at its core: a position on the <strong>Mindset Continuum</strong> (from fixed to growth), the <strong>Habits of Mind</strong> (Costa &amp; Kallick's 16 dispositions) that capable learners draw on, the integrated quality of the <strong>Agile Learner</strong> who deliberately develops their own capacity, and the <strong>Effective Effort</strong> they apply &mdash; strategy, feedback, and challenge at the right level.</p>
+  <p>The Stretch Tasks are designed for exactly that territory: problems whose answers aren't immediately known. The three narrative sections below show how the task set as a whole connects to the Mindset Continuum, the Agile Learner, and Effective Effort. The table that follows maps each task to its specific Habits of Mind &mdash; 1&ndash;3 <em>primary</em> Habits per task, kept tight to keep the mapping useful for planning.</p>
+</section>
+
+<section>
+  <h2>The 16 Habits of Mind</h2>
+  <div class="habits-grid">
+    <div><span class="h-num">1.</span> Persisting</div>
+    <div><span class="h-num">2.</span> Managing Impulsivity</div>
+    <div><span class="h-num">3.</span> Listening with Understanding &amp; Empathy</div>
+    <div><span class="h-num">4.</span> Thinking Flexibly</div>
+    <div><span class="h-num">5.</span> Thinking About Thinking (Metacognition)</div>
+    <div><span class="h-num">6.</span> Striving for Accuracy</div>
+    <div><span class="h-num">7.</span> Questioning &amp; Posing Problems</div>
+    <div><span class="h-num">8.</span> Applying Past Knowledge to New Situations</div>
+    <div><span class="h-num">9.</span> Thinking &amp; Communicating with Clarity &amp; Precision</div>
+    <div><span class="h-num">10.</span> Gathering Data Through All Senses</div>
+    <div><span class="h-num">11.</span> Creating, Imagining, Innovating</div>
+    <div><span class="h-num">12.</span> Responding with Wonderment &amp; Awe</div>
+    <div><span class="h-num">13.</span> Taking Responsible Risks</div>
+    <div><span class="h-num">14.</span> Finding Humour</div>
+    <div><span class="h-num">15.</span> Thinking Interdependently</div>
+    <div><span class="h-num">16.</span> Remaining Open to Continuous Learning</div>
+  </div>
+</section>
+
+<section class="pillar">
+  <h2>The Mindset Continuum</h2>
+  <p>Anderson refines Carol Dweck's binary fixed/growth model into a <strong>continuum</strong>: at one end, learners read struggle as evidence of a fixed limit ("I'm just not good at this"); at the other, they read struggle as the precise place where growth happens ("this is hard &mdash; that's the point"). Most students sit somewhere between, and their position shifts by subject, context, and how a task is framed.</p>
+  <p>Stretch Tasks are deliberately built with no clean answer. A student near the fixed end of the continuum will feel exposed and disengage; a student near the growth end will lean in. The tasks therefore work two ways at once: as a <strong>diagnostic</strong> (how a student responds to the discomfort reveals their current position) and as a <strong>gym</strong> (repeated practice with productive struggle is what shifts the position over time).</p>
+
+  <p class="standouts-label">Where the tasks land</p>
+  <ul class="standouts">
+    <li><span class="num">4.</span> <strong>Spot the Flaw in a Famous Model</strong> &mdash; requires accepting that authoritative knowledge can be wrong without becoming nihilistic about knowledge itself.</li>
+    <li><span class="num">14.</span> <strong>Write the Other Side's Speech</strong> &mdash; fixed-mindset reaction is "I can't argue that, I disagree"; growth-mindset reaction is "what would change my mind?"</li>
+    <li><span class="num">23.</span> <strong>When Should Engineers Refuse?</strong> &mdash; there is no safe answer; students must commit a position under uncertainty.</li>
+    <li><span class="num">26.</span> <strong>Constrained Creation</strong> &mdash; cutting 100 words to 50 forces students past the first draft, exactly where fixed-mindset learners quit.</li>
+    <li><span class="num">28.</span> <strong>The Museum of Mistakes</strong> &mdash; explicitly reframes failure as generative, the cornerstone of mindset shift.</li>
+  </ul>
+</section>
+
+<section class="pillar">
+  <h2>The Agile Learner</h2>
+  <p>Anderson uses <strong>Agile Learner</strong> for a student who actively, deliberately develops their own capacity to learn &mdash; combining the right mindset with the right habits, and applying both with strategic effort. Agile Learners seek out hard problems, treat feedback as information rather than judgement, and notice their own thinking as it happens.</p>
+  <p>The whole Stretch Tasks set is the kind of work an Agile Learner gravitates toward and a passive learner avoids. There is no recall to repeat, no formula to apply, no "right" answer to validate. Doing these tasks well &mdash; and especially doing them <em>across</em> sections, not just in comfort areas &mdash; is itself evidence of Agile Learner behaviour. Doing them poorly is informative too: it shows precisely where the Agile Learner muscles need building.</p>
+
+  <p class="standouts-label">Where the tasks land</p>
+  <ul class="standouts">
+    <li><span class="num">1.</span> <strong>Design a Study That Doesn't Exist Yet</strong> &mdash; students must self-direct the entire investigation; nothing is scaffolded.</li>
+    <li><span class="num">9.</span> <strong>One Problem, Five Disciplines</strong> &mdash; agility is the explicit skill being tested: can you switch lenses fluently?</li>
+    <li><span class="num">15.</span> <strong>Explain It at Five Levels</strong> &mdash; requires real-time adjustment of strategy as the audience changes.</li>
+    <li><span class="num">18.</span> <strong>Define the Indefinable</strong> &mdash; three definitions, each defensible, tested against real cases: iterative, strategic thinking.</li>
+    <li><span class="num">22.</span> <strong>Audit a System for Bias</strong> &mdash; demands the learner identify <em>what data they would need</em> before concluding, a hallmark Agile move.</li>
+  </ul>
+</section>
+
+<section class="pillar">
+  <h2>Effective Effort</h2>
+  <p>Anderson's framing of effort is precise: <strong>effective effort</strong> isn't just "trying hard." It's effort directed by strategy, calibrated to the right level of challenge (the zone of proximal development), informed by feedback, and applied to the right thing at the right time. Ineffective effort &mdash; re-reading, copying, polishing the easy parts &mdash; produces nothing.</p>
+  <p>Stretch Tasks reward effective effort and punish ineffective effort. There is nothing to memorise and nothing to polish; the work <em>is</em> the thinking. A student who throws an hour at a task without strategy produces a half-page of generic observation; a student who picks a lens, drafts, critiques their own draft, and revises produces something substantive. The gap between those two outputs is visible on the page.</p>
+
+  <p class="standouts-label">Where the tasks land</p>
+  <ul class="standouts">
+    <li><span class="num">2.</span> <strong>Reverse-Engineer a News Headline</strong> &mdash; without strategy ("find the source data first") students just opinionate; with strategy, they produce an audit.</li>
+    <li><span class="num">5.</span> <strong>Reconstruct an Everyday Reaction</strong> &mdash; requires structured, layered thinking (substance &rarr; bonds &rarr; electrons) rather than a vague description.</li>
+    <li><span class="num">8.</span> <strong>Build the Anti-Algorithm</strong> &mdash; students must specify decision rules and justify trade-offs; vague intentions don't survive.</li>
+    <li><span class="num">16.</span> <strong>The Misleading Truth</strong> &mdash; sentence-by-sentence annotation forces effort at the right granularity, not the comfortable one.</li>
+    <li><span class="num">26.</span> <strong>Constrained Creation</strong> &mdash; the cut from 100 to 50 words is pure deliberate practice on a single dimension (compression without loss).</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Task-by-task mapping</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Task</th>
+        <th>Section / Tag</th>
+        <th>Primary Habits of Mind</th>
+        <th>Why this connection</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr>
+        <td class="num">1</td>
+        <td class="title">Design a Study That Doesn't Exist Yet</td>
+        <td class="section">Inquiry &amp; Investigation <span class="tag tag-stem">STEM</span></td>
+        <td class="habits">Creating, Imagining, Innovating &middot; Questioning &amp; Posing Problems &middot; Gathering Data Through All Senses</td>
+        <td class="rationale">Students invent an entire research design &mdash; question, method, ethics, analysis &mdash; from a self-chosen knowledge gap.</td>
+      </tr>
+
+      <tr>
+        <td class="num">2</td>
+        <td class="title">Reverse-Engineer a News Headline</td>
+        <td class="section">Inquiry &amp; Investigation <span class="tag tag-hum">Humanities</span></td>
+        <td class="habits">Striving for Accuracy &middot; Questioning &amp; Posing Problems</td>
+        <td class="rationale">Auditing a published claim against its source data forces precise scrutiny of what was selected, omitted, or framed.</td>
+      </tr>
+
+      <tr>
+        <td class="num">3</td>
+        <td class="title">Map the Butterfly Effects</td>
+        <td class="section">Inquiry &amp; Investigation <span class="tag tag-hum">Humanities</span></td>
+        <td class="habits">Thinking Flexibly &middot; Applying Past Knowledge to New Situations</td>
+        <td class="rationale">Tracing downstream consequences across politics, technology, culture, and science demands genuine cross-domain transfer.</td>
+      </tr>
+
+      <tr>
+        <td class="num">4</td>
+        <td class="title">Spot the Flaw in a Famous Model</td>
+        <td class="section">Inquiry &amp; Investigation <span class="tag tag-stem">STEM</span></td>
+        <td class="habits">Remaining Open to Continuous Learning &middot; Striving for Accuracy &middot; Questioning &amp; Posing Problems</td>
+        <td class="rationale">Treating accepted knowledge as provisional &mdash; and tracking how science self-corrects &mdash; is core to a growth-oriented stance toward knowledge.</td>
+      </tr>
+
+      <tr>
+        <td class="num">5</td>
+        <td class="title">Reconstruct an Everyday Reaction</td>
+        <td class="section">Inquiry &amp; Investigation <span class="tag tag-stem">STEM</span></td>
+        <td class="habits">Striving for Accuracy &middot; Questioning &amp; Posing Problems &middot; Gathering Data Through All Senses</td>
+        <td class="rationale">Mapping bond changes at the molecular level demands precision; identifying open questions models real scientific inquiry.</td>
+      </tr>
+
+      <tr>
+        <td class="num">6</td>
+        <td class="title">Decisions Without a Brain</td>
+        <td class="section">Inquiry &amp; Investigation <span class="tag tag-stem">STEM</span></td>
+        <td class="habits">Responding with Wonderment &amp; Awe &middot; Gathering Data Through All Senses &middot; Thinking Flexibly</td>
+        <td class="rationale">Close observation of an unfamiliar organism, paired with reframing what "decision" means, sits at the heart of curiosity-led inquiry.</td>
+      </tr>
+
+      <tr>
+        <td class="num">7</td>
+        <td class="title">Solve It with Only What You Have</td>
+        <td class="section">Problem Solving &amp; Design <span class="tag tag-soc">Social / Ethics</span></td>
+        <td class="habits">Creating, Imagining, Innovating &middot; Thinking Flexibly &middot; Taking Responsible Risks</td>
+        <td class="rationale">The zero-budget constraint forces inventive re-use of existing resources rather than wishful design.</td>
+      </tr>
+
+      <tr>
+        <td class="num">8</td>
+        <td class="title">Build the Anti-Algorithm</td>
+        <td class="section">Problem Solving &amp; Design <span class="tag tag-stem">STEM</span></td>
+        <td class="habits">Creating, Imagining, Innovating &middot; Thinking Flexibly &middot; Metacognition</td>
+        <td class="rationale">Designing for a non-default optimisation goal (wellbeing, surprise) requires reframing what counts as success &mdash; and noticing one's own assumptions.</td>
+      </tr>
+
+      <tr>
+        <td class="num">9</td>
+        <td class="title">One Problem, Five Disciplines</td>
+        <td class="section">Problem Solving &amp; Design <span class="tag tag-soc">Social / Ethics</span></td>
+        <td class="habits">Thinking Flexibly &middot; Applying Past Knowledge to New Situations &middot; Thinking Interdependently</td>
+        <td class="rationale">Explicitly demands moving between disciplinary lenses and judging which approach has most leverage &mdash; a near-textbook flexibility task.</td>
+      </tr>
+
+      <tr>
+        <td class="num">10</td>
+        <td class="title">Design for the Edge Case</td>
+        <td class="section">Problem Solving &amp; Design <span class="tag tag-cre">Creative</span></td>
+        <td class="habits">Listening with Understanding &amp; Empathy &middot; Creating, Imagining, Innovating</td>
+        <td class="rationale">Redesigning specifically for the person a system currently fails requires sustained empathetic perspective-taking.</td>
+      </tr>
+
+      <tr>
+        <td class="num">11</td>
+        <td class="title">Redesign a Building for One Sense</td>
+        <td class="section">Problem Solving &amp; Design <span class="tag tag-cre">Creative</span></td>
+        <td class="habits">Thinking Flexibly &middot; Creating, Imagining, Innovating &middot; Listening with Understanding &amp; Empathy</td>
+        <td class="rationale">Students must imagine a sensory experience unlike their own and justify materials and pathways from that altered baseline.</td>
+      </tr>
+
+      <tr>
+        <td class="num">12</td>
+        <td class="title">Engineer Out the Workaround</td>
+        <td class="section">Problem Solving &amp; Design <span class="tag tag-soc">Social / Ethics</span></td>
+        <td class="habits">Creating, Imagining, Innovating &middot; Thinking Flexibly &middot; Striving for Accuracy</td>
+        <td class="rationale">Redesigning infrastructure so desired behaviour becomes easiest blends mechanical precision with behavioural lateral thinking.</td>
+      </tr>
+
+      <tr>
+        <td class="num">13</td>
+        <td class="title">Translate the Untranslatable</td>
+        <td class="section">Language &amp; Communication <span class="tag tag-hum">Humanities</span></td>
+        <td class="habits">Thinking &amp; Communicating with Clarity &amp; Precision &middot; Creating, Imagining, Innovating</td>
+        <td class="rationale">Inventing an English equivalent for a nuanced concept demands both precise definition and original word-making.</td>
+      </tr>
+
+      <tr>
+        <td class="num">14</td>
+        <td class="title">Write the Other Side's Speech</td>
+        <td class="section">Language &amp; Communication <span class="tag tag-phi">Philosophy</span></td>
+        <td class="habits">Remaining Open to Continuous Learning &middot; Thinking Flexibly &middot; Metacognition</td>
+        <td class="rationale">Arguing the opposing view fairly and reflecting on what shifted is dispositional growth work in its purest Anderson form.</td>
+      </tr>
+
+      <tr>
+        <td class="num">15</td>
+        <td class="title">Explain It at Five Levels</td>
+        <td class="section">Language &amp; Communication <span class="tag tag-hum">Humanities</span></td>
+        <td class="habits">Thinking &amp; Communicating with Clarity &amp; Precision &middot; Metacognition &middot; Thinking Flexibly</td>
+        <td class="rationale">Students must monitor their own language choices and adapt to each audience &mdash; the metacognitive demand is explicit.</td>
+      </tr>
+
+      <tr>
+        <td class="num">16</td>
+        <td class="title">The Misleading Truth</td>
+        <td class="section">Language &amp; Communication <span class="tag tag-phi">Philosophy</span></td>
+        <td class="habits">Striving for Accuracy &middot; Metacognition &middot; Questioning &amp; Posing Problems</td>
+        <td class="rationale">Dissecting how true statements can mislead requires students to scrutinise their own rhetoric, sentence by sentence.</td>
+      </tr>
+
+      <tr>
+        <td class="num">17</td>
+        <td class="title">The Vocabulary of a Field</td>
+        <td class="section">Language &amp; Communication <span class="tag tag-hum">Humanities</span></td>
+        <td class="habits">Thinking &amp; Communicating with Clarity &amp; Precision &middot; Metacognition</td>
+        <td class="rationale">Examining specialist language asks students to reflect on how vocabulary shapes &mdash; and gatekeeps &mdash; access to ideas.</td>
+      </tr>
+
+      <tr>
+        <td class="num">18</td>
+        <td class="title">Define the Indefinable</td>
+        <td class="section">Language &amp; Communication <span class="tag tag-phi">Philosophy</span></td>
+        <td class="habits">Striving for Accuracy &middot; Thinking Flexibly &middot; Metacognition</td>
+        <td class="rationale">Writing three rigorous, defensible definitions and testing them against real cases exposes the looseness in everyday language.</td>
+      </tr>
+
+      <tr>
+        <td class="num">19</td>
+        <td class="title">Create a Moral Dilemma, Not a Trolley Problem</td>
+        <td class="section">Ethics &amp; Philosophy <span class="tag tag-phi">Philosophy</span></td>
+        <td class="habits">Creating, Imagining, Innovating &middot; Questioning &amp; Posing Problems &middot; Thinking Interdependently</td>
+        <td class="rationale">Inventing an original dilemma and testing it on others combines original design with collaborative reasoning.</td>
+      </tr>
+
+      <tr>
+        <td class="num">20</td>
+        <td class="title">Who Gets to Decide?</td>
+        <td class="section">Ethics &amp; Philosophy <span class="tag tag-soc">Social / Ethics</span></td>
+        <td class="habits">Thinking Flexibly &middot; Remaining Open to Continuous Learning &middot; Striving for Accuracy</td>
+        <td class="rationale">The explicit requirement to acknowledge the strongest objection to one's own view is direct Habits-of-Mind territory.</td>
+      </tr>
+
+      <tr>
+        <td class="num">21</td>
+        <td class="title">The Rights of Future People</td>
+        <td class="section">Ethics &amp; Philosophy <span class="tag tag-phi">Philosophy</span></td>
+        <td class="habits">Thinking Flexibly &middot; Applying Past Knowledge to New Situations &middot; Striving for Accuracy</td>
+        <td class="rationale">Applying abstract ethical reasoning to a long-horizon policy decision stretches transfer across both time and discipline.</td>
+      </tr>
+
+      <tr>
+        <td class="num">22</td>
+        <td class="title">Audit a System for Bias</td>
+        <td class="section">Ethics &amp; Philosophy <span class="tag tag-soc">Social / Ethics</span></td>
+        <td class="habits">Questioning &amp; Posing Problems &middot; Striving for Accuracy &middot; Gathering Data Through All Senses</td>
+        <td class="rationale">A structured audit requires evidence-led reasoning rather than opinion &mdash; students name what data they would need before concluding.</td>
+      </tr>
+
+      <tr>
+        <td class="num">23</td>
+        <td class="title">When Should Engineers Refuse?</td>
+        <td class="section">Ethics &amp; Philosophy <span class="tag tag-phi">Philosophy</span></td>
+        <td class="habits">Metacognition &middot; Taking Responsible Risks &middot; Remaining Open to Continuous Learning</td>
+        <td class="rationale">Building a decision framework and pressure-testing it against a real dilemma develops moral reasoning under uncertainty.</td>
+      </tr>
+
+      <tr>
+        <td class="num">24</td>
+        <td class="title">Whose Risk, Whose Reward?</td>
+        <td class="section">Ethics &amp; Philosophy <span class="tag tag-soc">Social / Ethics</span></td>
+        <td class="habits">Thinking Flexibly &middot; Thinking Interdependently &middot; Striving for Accuracy</td>
+        <td class="rationale">Mapping stakeholder asymmetries and proposing structural realignment is systems-level ethical reasoning.</td>
+      </tr>
+
+      <tr>
+        <td class="num">25</td>
+        <td class="title">Write a Wikipedia Article from 2074</td>
+        <td class="section">Creative &amp; Imaginative <span class="tag tag-cre">Creative</span></td>
+        <td class="habits">Creating, Imagining, Innovating &middot; Applying Past Knowledge to New Situations</td>
+        <td class="rationale">Extrapolating from current evidence into the future is disciplined imagination &mdash; speculation grounded in pattern recognition.</td>
+      </tr>
+
+      <tr>
+        <td class="num">26</td>
+        <td class="title">Constrained Creation</td>
+        <td class="section">Creative &amp; Imaginative <span class="tag tag-cre">Creative</span></td>
+        <td class="habits">Persisting &middot; Striving for Accuracy &middot; Thinking &amp; Communicating with Clarity &amp; Precision</td>
+        <td class="rationale">Cutting from 100 to 50 words while preserving the core idea is iterative deliberate practice &mdash; a model of effective effort.</td>
+      </tr>
+
+      <tr>
+        <td class="num">27</td>
+        <td class="title">Invent a Subject That Should Exist</td>
+        <td class="section">Creative &amp; Imaginative <span class="tag tag-soc">Social / Ethics</span></td>
+        <td class="habits">Creating, Imagining, Innovating &middot; Metacognition &middot; Questioning &amp; Posing Problems</td>
+        <td class="rationale">Justifying what's missing from a curriculum forces students to articulate what they believe learning is for.</td>
+      </tr>
+
+      <tr>
+        <td class="num">28</td>
+        <td class="title">The Museum of Mistakes</td>
+        <td class="section">Creative &amp; Imaginative <span class="tag tag-hum">Humanities</span></td>
+        <td class="habits">Remaining Open to Continuous Learning &middot; Responding with Wonderment &amp; Awe &middot; Metacognition</td>
+        <td class="rationale">Explicitly reframes failure as generative &mdash; the most direct alignment with Anderson's growth-mindset work in the whole set.</td>
+      </tr>
+
+      <tr>
+        <td class="num">29</td>
+        <td class="title">Design a Living Building</td>
+        <td class="section">Creative &amp; Imaginative <span class="tag tag-cre">Creative</span></td>
+        <td class="habits">Creating, Imagining, Innovating &middot; Responding with Wonderment &amp; Awe &middot; Taking Responsible Risks</td>
+        <td class="rationale">Imagining a structure that grows, heals, and dies pulls students into speculative territory they must defend to a sceptic.</td>
+      </tr>
+
+      <tr>
+        <td class="num">30</td>
+        <td class="title">The Periodic Table of Something Else</td>
+        <td class="section">Creative &amp; Imaginative <span class="tag tag-hum">Humanities</span></td>
+        <td class="habits">Thinking Flexibly &middot; Creating, Imagining, Innovating &middot; Striving for Accuracy</td>
+        <td class="rationale">Organising the unstructured into a defensible system blends imaginative leap with the rigour of justifying every axis.</td>
+      </tr>
+
+    </tbody>
+  </table>
+</section>
+
+<p class="footnote">
+  Based on James Anderson's <em>Learnership</em> &mdash; <a href="https://www.jamesanderson.com.au/" target="_blank" rel="noopener">jamesanderson.com.au</a>.
+</p>
+
+<p style="margin-top: 1.5rem;">
+  <a class="back" href="index.html">&larr; Back to Stretch Tasks</a>
+</p>
+
+</div>
+</body>
+</html>
