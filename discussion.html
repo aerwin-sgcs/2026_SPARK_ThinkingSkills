@@ -80,6 +80,33 @@ textarea.r-box:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(1
   .wrap { padding: 2rem 1.1rem 3rem; }
   h1 { font-size: 1.7rem; }
 }
+
+.r-print { display: none; }
+
+@media print {
+  body { background: #fff; color: #000; }
+  .wrap { max-width: none; padding: 0; }
+  .back, .tools, .bottom-back, .footnote, .eyebrow, .subtitle, .intro { display: none; }
+  header { border-bottom: 1px solid #888; padding-bottom: 0.5rem; margin-bottom: 1rem; }
+  h1 { font-size: 1.5rem; color: #000; }
+  h2 { font-size: 1.1rem; margin: 1.2rem 0 0.5rem; padding-bottom: 0.25rem; border-bottom: 1px solid #ccc; color: #000; }
+  .question { margin: 0.4rem 0 0.9rem; page-break-inside: avoid; }
+  .q-label { color: #555; }
+  .q-text { margin-bottom: 0.25rem; color: #000; }
+  textarea.r-box { display: none; }
+  .r-print {
+    display: block;
+    white-space: pre-wrap;
+    font-family: var(--serif);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #222;
+    padding: 0.25rem 0 0.5rem;
+    min-height: 1.2em;
+    border-bottom: 1px dotted #ccc;
+  }
+  .r-print.empty { color: #aaa; font-style: italic; }
+}
 </style>
 </head>
 <body>
@@ -172,6 +199,7 @@ textarea.r-box:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(1
 </section>
 
 <div class="tools">
+  <button type="button" onclick="printReflections()">&#8659; Download PDF (Print&hellip;)</button>
   <button type="button" onclick="backupReflections()">&#8623; Backup reflections (JSON)</button>
   <button type="button" class="clear" onclick="clearAllReflections()">&#10005; Clear all reflections</button>
 </div>
@@ -245,6 +273,22 @@ function backupReflections() {
   document.body.removeChild(a);
   setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
 }
+
+function printReflections() {
+  // Mirror each textarea's value into a print-only div, then trigger print.
+  document.querySelectorAll('textarea.r-box').forEach(function(el) {
+    var div = document.createElement('div');
+    var val = el.value || '';
+    div.className = 'r-print' + (val.trim() === '' ? ' empty' : '');
+    div.textContent = val.trim() === '' ? '(no reflection written yet)' : val;
+    el.parentNode.insertBefore(div, el.nextSibling);
+  });
+  window.print();
+}
+
+window.addEventListener('afterprint', function() {
+  document.querySelectorAll('.r-print').forEach(function(el) { el.remove(); });
+});
 
 function clearAllReflections() {
   if (!confirm('Clear ALL your reflections? This will erase every response on this page. This cannot be undone.')) return;
