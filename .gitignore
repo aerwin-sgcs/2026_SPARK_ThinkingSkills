@@ -7,3 +7,8 @@ handover.md
 
 # version control
 index backup before nav drawer.html
+
+# Versioned snapshots (kept local for rollback)
+*v[0-9]*.html
+*v[0-9]*.md
+*v[0-9]*.docx
